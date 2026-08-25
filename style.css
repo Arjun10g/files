@@ -1,0 +1,78 @@
+:root {
+  --bg: #ffffff;
+  --fg: #17171a;
+  --muted: #6b6b74;
+  --line: #e6e6ea;
+  --accent: #17171a;
+  --hover: #f6f6f8;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111113;
+    --fg: #ececf0;
+    --muted: #8d8d99;
+    --line: #26262b;
+    --accent: #ececf0;
+    --hover: #1a1a1e;
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font: 16px/1.5 ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+main {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 4rem 1.25rem 6rem;
+}
+header { margin-bottom: 2rem; }
+h1 {
+  margin: 0 0 .35rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+.sub { margin: 0; color: var(--muted); font-size: .95rem; }
+#q {
+  width: 100%;
+  padding: .6rem .8rem;
+  margin-bottom: 1.5rem;
+  font: inherit;
+  font-size: .95rem;
+  color: var(--fg);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: .5rem;
+}
+#q:focus { outline: none; border-color: var(--muted); }
+.list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.list li { border-bottom: 1px solid var(--line); }
+.list a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .85rem .6rem;
+  color: inherit;
+  text-decoration: none;
+  border-radius: .4rem;
+}
+.list a:hover { background: var(--hover); }
+.name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ext {
+  font-size: .7rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: .3rem;
+  padding: .1rem .35rem;
+}
+.size { color: var(--muted); font-size: .85rem; font-variant-numeric: tabular-nums; }
+.status { color: var(--muted); font-size: .9rem; padding: 1rem .6rem; margin: 0; }
+.status:empty { display: none; }
+footer { margin-top: 3rem; font-size: .85rem; }
+footer a { color: var(--muted); }
