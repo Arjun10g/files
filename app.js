@@ -1,6 +1,6 @@
 // Lists everything in files/ by asking the GitHub API, so uploading a file is
 // the only step needed to publish it. Owner/repo are derived from the URL.
-const FALLBACK = { owner: 'arjun10g', repo: 'downloads' }; // used for local preview
+const FALLBACK = { owner: 'arjun10g', repo: 'files' }; // used for local preview
 const DIR = 'files';
 
 function target() {

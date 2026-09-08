@@ -13,14 +13,14 @@ rebuild step is needed — the file appears on the site as soon as it's pushed.
 ## One-time setup
 
 ```bash
-git remote add origin https://github.com/arjun10g/<repo>.git
+git remote add origin https://github.com/arjun10g/files.git
 git branch -M main
 git push -u origin main
 ```
 
 Then in the repo: **Settings → Pages → Source: Deploy from a branch → `main` / `/ (root)`**.
 
-Live at `https://arjun10g.github.io/<repo>/`.
+Live at `https://arjun10g.github.io/files/`.
 
 ## Notes
 
