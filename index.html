@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Downloads</title>
+<meta name="description" content="Download shared files or upload a ZIP for our GitHub archive.">
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -11,16 +12,59 @@
 <main>
   <header>
     <h1>Downloads</h1>
-    <p class="sub">Files published from this repository.</p>
+    <p class="sub">Download shared files or send us a ZIP.</p>
   </header>
 
-  <input id="q" type="search" placeholder="Filter files…" autocomplete="off" spellcheck="false">
+  <section class="upload-panel" aria-labelledby="upload-heading">
+    <p class="eyebrow">Send a file</p>
+    <h2 id="upload-heading">Upload a ZIP</h2>
+    <p>Send us a ZIP right here. No sign-in needed.</p>
+    <form id="upload-form" novalidate>
+      <fieldset id="upload-fields" disabled>
+        <legend class="visually-hidden">Choose and upload a ZIP</legend>
+        <label id="drop-zone" class="drop-zone" for="zip-file">
+          <input id="zip-file" class="visually-hidden" type="file" accept=".zip,application/zip,application/x-zip-compressed" aria-label="Choose ZIP file" aria-describedby="zip-help file-info upload-status">
+          <span class="drop-title">Choose a ZIP <span class="drop-hint">or drop it here</span></span>
+          <span id="zip-help" class="drop-detail">One ZIP at a time · Up to 25 MB</span>
+        </label>
+        <p id="file-info" class="file-info">No file selected.</p>
+        <button id="upload-button" class="button" type="submit" disabled>Upload ZIP</button>
+      </fieldset>
+      <progress id="upload-progress" max="100" value="0" aria-label="ZIP upload progress" hidden></progress>
+      <p id="upload-status" class="upload-status" role="status" aria-live="polite"></p>
+      <div id="upload-receipt" class="receipt" hidden>
+        <p id="receipt-id"></p>
+        <a id="receipt-download" target="_blank" rel="noopener noreferrer" hidden>Download from GitHub</a>
+      </div>
+    </form>
+    <p class="upload-note">Uploads are public. We receive your file first, then archive it to GitHub. Archiving may take a few minutes.</p>
+    <p class="upload-note">Having trouble? <a id="upload-link" href="https://github.com/Arjun10g/files/issues/1" target="_blank" rel="noopener noreferrer">Attach your ZIP on GitHub instead ↗</a></p>
+    <noscript><p class="upload-note">JavaScript is required to upload here. Use the GitHub link above to attach your ZIP in a comment.</p></noscript>
+  </section>
 
-  <ul id="list" class="list"></ul>
-  <p id="status" class="status">Loading…</p>
+  <section class="file-section" aria-labelledby="received-heading">
+    <div class="section-heading">
+      <h2 id="received-heading">Received ZIPs</h2>
+      <div class="section-actions">
+        <button id="refresh-uploads" class="text-button" type="button" aria-label="Refresh received ZIPs">Refresh</button>
+        <a id="archives-link" href="https://github.com/Arjun10g/files/releases" target="_blank" rel="noopener noreferrer">GitHub archive ↗</a>
+      </div>
+    </div>
+    <ul id="uploads-list" class="list"></ul>
+    <p id="uploads-status" class="status" role="status">Loading submissions…</p>
+  </section>
+
+  <section class="file-section" aria-labelledby="downloads-heading">
+    <h2 id="downloads-heading">Published downloads</h2>
+    <label class="visually-hidden" for="q">Filter published downloads</label>
+    <input id="q" type="search" placeholder="Filter files…" autocomplete="off" spellcheck="false">
+    <ul id="list" class="list"></ul>
+    <p id="status" class="status" role="status">Loading downloads…</p>
+  </section>
 
   <footer>
-    <a id="repo-link" href="#" target="_blank" rel="noopener">View on GitHub</a>
+    <a id="repo-link" href="https://github.com/Arjun10g/files" target="_blank" rel="noopener noreferrer">View repository on GitHub</a>
+    <noscript><p>Open the repository to browse published downloads.</p></noscript>
   </footer>
 </main>
 <script src="app.js"></script>

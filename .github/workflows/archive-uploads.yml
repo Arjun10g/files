@@ -1,0 +1,32 @@
+name: Archive uploaded ZIPs
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '3-58/5 * * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: archive-uploads
+  cancel-in-progress: false
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24'
+      - name: Store pending ZIPs in GitHub Releases
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          UPLOAD_BACKEND_URL: ${{ vars.UPLOAD_BACKEND_URL }}
+          UPLOAD_QUEUE_SECRET: ${{ secrets.UPLOAD_QUEUE_SECRET }}
+        run: node scripts/archive-uploads.mjs
