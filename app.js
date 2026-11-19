@@ -38,7 +38,12 @@ const uploadStatus = document.getElementById('upload-status');
 const receipt = document.getElementById('upload-receipt');
 const receiptId = document.getElementById('receipt-id');
 const receiptDownload = document.getElementById('receipt-download');
-let items = [];
+const publishedLinks = [...listEl.querySelectorAll('a[download]')].map(link => ({
+  name: link.download,
+  label: link.querySelector('.name').textContent,
+  url: link.getAttribute('href'),
+}));
+let items = publishedLinks;
 let selectedFile = null;
 let uploading = false;
 let receiptTimer;
@@ -47,7 +52,7 @@ let listGeneration = 0;
 
 function renderDownloads() {
   const query = qEl.value.trim().toLowerCase();
-  const shown = query ? items.filter(file => file.name.toLowerCase().includes(query)) : items;
+  const shown = query ? items.filter(file => `${file.name} ${file.label || ''}`.toLowerCase().includes(query)) : items;
   listEl.replaceChildren(...shown.map(file => {
     const li = document.createElement('li');
     const link = document.createElement('a');
@@ -55,7 +60,7 @@ function renderDownloads() {
     link.download = file.name;
     const name = document.createElement('span');
     name.className = 'name';
-    name.textContent = file.name;
+    name.textContent = file.label || file.name;
     link.append(name);
     const dot = file.name.lastIndexOf('.');
     if (dot > 0) {
@@ -64,10 +69,12 @@ function renderDownloads() {
       extension.textContent = file.name.slice(dot + 1);
       link.append(extension);
     }
-    const size = document.createElement('span');
-    size.className = 'size';
-    size.textContent = fmtSize(file.size);
-    link.append(size);
+    if (Number.isFinite(file.size)) {
+      const size = document.createElement('span');
+      size.className = 'size';
+      size.textContent = fmtSize(file.size);
+      link.append(size);
+    }
     li.append(link);
     return li;
   }));
@@ -75,16 +82,21 @@ function renderDownloads() {
 }
 
 async function loadDownloads(owner, repo) {
+  if (!items.length) statusEl.textContent = 'Loading downloads…';
   try {
     const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${DIR}`);
     if (!response.ok) throw new Error(response.status === 404 ? `No ${DIR}/ directory in ${owner}/${repo} yet.` : `GitHub API error ${response.status}`);
-    items = (await response.json())
+    const entries = (await response.json())
       .filter(file => file.type === 'file' && file.name !== '.gitkeep')
-      .map(file => ({ name: file.name, size: file.size, url: file.download_url }))
-      .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+      .map(file => [file.name, { name: file.name, size: file.size, url: file.download_url }]);
+    const downloads = new Map(entries);
+    for (const link of publishedLinks) {
+      downloads.set(link.name, { ...downloads.get(link.name), ...link });
+    }
+    items = [...downloads.values()].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
     renderDownloads();
   } catch (error) {
-    statusEl.textContent = error.message;
+    if (!items.length) statusEl.textContent = error.message;
   }
 }
 
